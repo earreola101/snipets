@@ -1,0 +1,35 @@
+@echo off
+setlocal enabledelayedexpansion
+set ref_mac_in=4473d6070ac8
+rem VERSION 1.2.0
+
+rem ============================================================================
+set inmac=%ref_mac_in%
+for %%b in (A B C D E F ) do (
+set inmac=!inmac:%%b=%%b!
+)
+<MemoryBuffer.txt (
+  for /l %%i in (1,1,15) do set /p "="
+  set /p "line_="
+  set /p "line__="
+)
+set rstatus=1
+set ref1=!line_!
+set ref2=!line__!
+set read_mac="%ref1:~6,12%%ref2:~6,6%"
+set read_mac="%read_mac:~2,17%"
+For %%# in (%read_mac%) do (
+    SET var=%%~n#
+    Set readMac=!var!
+    set readMac=!readMac: =!
+)
+set reverMac=%readMac:~10,2%%readMac:~8,2%%readMac:~6,2%%readMac:~4,2%%readMac:~2,2%%readMac:~0,2%
+echo Macaddress Input:%inmac%
+echo  NFC MemoryTable:%reverMac%
+if not "%inmac%"=="%reverMac%" (
+echo [NOT MATCHED]
+exit 1
+) else (
+echo [MATCHED]
+)
+rem ============================================================================
